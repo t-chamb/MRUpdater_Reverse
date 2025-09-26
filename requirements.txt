@@ -1,12 +1,17 @@
 # MRUpdater Dependencies
 # Based on analysis of the decompiled application structure
 
-# GUI Framework
-PyQt5>=5.15.0
-# Alternative: PySide2>=5.15.0
+# GUI Framework (PySide6 is used, not PyQt5)
+PySide6>=6.0.0
 
 # Serial Communication
 pyserial>=3.5
+
+# USB Communication
+pyusb>=1.2.0
+
+# HTTP Requests
+requests>=2.28.0
 
 # AWS S3 Integration (for firmware downloads)
 boto3>=1.26.0
@@ -17,6 +22,12 @@ esptool>=4.0.0
 
 # Data Validation
 pydantic>=1.10.0
+
+# State Machine
+python-statemachine>=2.0.0
+
+# Platform Directories
+platformdirs>=3.0.0
 
 # Utility Libraries
 six>=1.16.0
