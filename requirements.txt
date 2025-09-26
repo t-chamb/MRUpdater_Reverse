@@ -1,0 +1,28 @@
+# MRUpdater Dependencies
+# Based on analysis of the decompiled application structure
+
+# GUI Framework
+PyQt5>=5.15.0
+# Alternative: PySide2>=5.15.0
+
+# Serial Communication
+pyserial>=3.5
+
+# AWS S3 Integration (for firmware downloads)
+boto3>=1.26.0
+botocore>=1.29.0
+
+# ESP32 Communication
+esptool>=4.0.0
+
+# Data Validation
+pydantic>=1.10.0
+
+# Utility Libraries
+six>=1.16.0
+reedsolo>=1.5.4
+
+# Development Dependencies (optional)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=5.0.0
