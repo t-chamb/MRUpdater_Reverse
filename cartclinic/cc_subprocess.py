@@ -1,3 +1,5 @@
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
 # Source Generated with Decompyle++
 # File: cc_subprocess.pyc (Python 3.10)
 
@@ -86,9 +88,27 @@ class CartClinicSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            self.start_timer()
+            self.setup()
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error.emit('COULD NOT SWITCH THE CHROMATIC TO CART CLINIC MODE')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def setup(self):
         flashing_tool_logger.info('Flashing Cart Clinic firmware to SRAM...')
         self._sram_thread = FlashSRAMSubprocess(self.chromatic, self.cart_clinic_fw_path, **('chromatic', 'filepath'))
@@ -98,7 +118,9 @@ class CartClinicSubprocess(ChromaticSubprocess):
     
     def setup_callback(self = None, flash_result = None):
         if flash_result != OpenFPGALoaderResult.SUCCESS:
-            self.error_callback('FAILED TO PUT CHROMATIC IN CART CLINIC MODE')
+            self.error_callback('FAILED TO PUT CHROMATIC IWarning: Stack history is not empty!
+Warning: block stack is not empty!
+N CART CLINIC MODE')
             return None
         None.setup_complete_signal.emit(True)
 
@@ -134,9 +156,25 @@ class CartClinicSubprocess(ChromaticSubprocess):
 
     
     def check_mr_cart_inserted(self = None, session = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            require_mr_cartridge_inserted(session)
+        finally:
+            return True
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error_callback(InvalidCartridgeError().message)
+            finally:
+                e = None
+                del e
+                return False
+                e = None
+                del e
+
+
+
     __classcell__ = None
 
 
@@ -198,7 +236,9 @@ class CartClinicUpdateSubprocess(ChromaticSubprocess):
     error = Signal(str)
     
     def __init__(self = None, chromatic = None, chromatic_session = None, ips_base64 = None, cart_game_data = None, game_save_settings = None, animation_thread = None, detection_thread = None):
-        super().__init__(chromatic)
+    Warning: Stack history is not empty!
+Warning: block stack is not empty!
+    super().__init__(chromatic)
         self.chromatic_session = chromatic_session
         self.ips_base64 = ips_base64
         self.cart_game_data = cart_game_data
@@ -208,9 +248,26 @@ class CartClinicUpdateSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            self.patch_game()
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error.emit('AN ERROR OCCURRED WHILE UPDATING CARTRIDGE')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def error_callback(self = None, error = None):
         self.error.emit(error)
 
@@ -275,7 +332,13 @@ class CartClinicHomebrewSubprocess(CartClinicSubprocess):
         self._cc_write_thread.finished.connect(self.write_homebrew_callback)
         self._cc_write_thread.error.connect(self.error_callback)
         self._cc_write_thread.progress.connect(self.progress_callback)
-        self._cc_write_thread.start()
+        self._cc_write_thread.sWarning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+tart()
 
     
     def write_homebrew_callback(self = None, result = None):
@@ -298,9 +361,53 @@ class ReadCartridgeSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            flashing_tool_logger.info('Reading cartridge data...')
+            cart_bytes = read_cartridge_helper(self.chromatic_session, self.animation_thread, self.detection_thread, self.emit_progress)
+        finally:
+            pass
+        e = None
+        
+        try:
+            flashing_tool_logger.error(e)
+            self.error.emit(e.message)
+        finally:
+            e = None
+            del e
+            return None
+            e = None
+            del e
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error.emit('THE CARTRIDGE COULD NOT BE READ')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+                e = None
+                
+                try:
+                    flashing_tool_logger.error(e)
+                    self.error.emit('AN ERROR OCCURRED DURING CARTRIDGE READ')
+                finally:
+                    e = None
+                    del e
+                    return None
+                    e = None
+                    del e
+                    self.finish(cart_bytes)
+                    return None
+
+
+
+
+
+    
     def parse_progress(self = None, data = None):
         pass
 
@@ -324,9 +431,29 @@ class RequestPatchSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            flashing_tool_logger.info('Requesting patch...')
+            mrpatcher_response = request_game_patch(self.endpoint, self.game_bytes)
+        finally:
+            pass
+        e = None
+        
+        try:
+            flashing_tool_logger.error(e)
+            self.error.emit('COULD NOT RETRIEVE UPDATED GAME DATA\nPLEASE TRY AGAIN LATER')
+        finally:
+            e = None
+            del e
+            return None
+            e = None
+            del e
+            self.finish(mrpatcher_response)
+            return None
+
+
+
+    
     def parse_progress(self = None, data = None):
         pass
 
@@ -345,9 +472,34 @@ class ApplyPatchSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            flashing_tool_logger.info('Patching game...')
+            new_game = apply_game_patch(self.game_data, self.ips_base64)
+            self.finish(new_game)
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error.emit('AN ERROR OCCURRED DURING GAME DATA UPDATE')
+            finally:
+                e = None
+                del e
+                return None
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+                e = None
+                del e
+
+
+
+    
     def parse_progress(self = None, data = None):
         pass
 
@@ -369,9 +521,51 @@ class WriteCartridgeSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            flashing_tool_logger.info('Writing cartridge data...')
+            self.finish(write_cartridge_helper(self.chromatic_session, self.game_data, self.game_save_settings, self.animation_thread, self.detection_thread, self.emit_progress))
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error.emit('LOST CONNECTION TO THE CARTRIDGE')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+                e = None
+                
+                try:
+                    flashing_tool_logger.error(e)
+                    self.error.emit(e.message)
+                finally:
+                    e = None
+                    del e
+                    return None
+                    e = None
+                    del e
+                    e = None
+                    
+                    try:
+                        flashing_tool_logger.error(e)
+                        self.error.emit('AN ERROR OCCURRED WHILE UPDATING CARTRIDGE')
+                    finally:
+                        e = None
+                        del e
+                        return None
+                        e = None
+                        del e
+
+
+
+
+
+    
     def emit_progress(self = None, progress = None):
         offset_progress = ((100 - PATCH_PROGRESS_OFFSET) / 100) * progress
         self.progress.emit(PATCH_PROGRESS_OFFSET + offset_progress)
@@ -389,9 +583,26 @@ class CartClinicDetectFRAMSubprocess(CartClinicSubprocess):
 
     
     def detect_fram(self = None, chromatic_session = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            fram_detected = chromatic_session.detect_fram()
+            self.finish(fram_detected)
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(f'''Failed to detect FRAM: {e}''')
+                self.error.emit('FAILED TO DETECT SAVE DATA')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
     __classcell__ = None
 
 
@@ -409,9 +620,44 @@ class CartClinicGetGameSettingsSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            flashing_tool_logger.info('Reading cartridge data...')
+            game_data = read_single_flash_bank(self.chromatic_session, 0)
+            flashing_tool_logger.info('Game data read successfully')
+            game_info = request_game_info(self.endpoint, game_data)
+            flashing_tool_logger.info(f'''Game information reWarning: Stack history is empty, something wrong might have happened
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is empty, something wrong might have happened
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+trieved successfully: {game_info}''')
+            if not game_info or game_info.game_title:
+                flashing_tool_logger.error('Failed to match game')
+                self.error.emit('THE GAME WAS NOT RECOGNIZED')
+        finally:
+            return None
+            if not game_info.save_settings:
+                flashing_tool_logger.error('Failed to retrieve game save settings')
+                self.error.emit('GAME IS NOT COMPATIBLE WITH CART CLINIC')
+            return None
+            self.finish(game_info)
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(f'''Failed to get game save settings: {e}''')
+                self.error.emit('FAILED TO GET GAME SAVE SETTINGS')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
     __classcell__ = None
 
 
@@ -429,9 +675,33 @@ class CartClinicBackupSaveSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            save_data = self.get_save_data()
+            with open(self._save_path, 'wb') as f:
+                f.write(save_data)
+                None(None, None, None)
+            with None:
+                if not None:
+                    pass
+            self.finish(True)
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(f'''Failed to backup save file: {e}''')
+                self.error.emit('FAILED TO BACKUP SAVE FILE')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def get_save_data(self = None):
         '''Retrieves the save data either from FRAM or flash based on the cart/game save settings.'''
         if self._fram_detected:
@@ -459,14 +729,82 @@ class CartClinicWriteSaveSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            with open(self._save_path, 'rb') as file:
+                fram_data = file.read()
+                None(None, None, None)
+            with None:
+                if not None:
+                    pass
+            if len(fram_data) != FRAM_SIZE:
+                raise ValueError(f'''Save file must be {FRAM_SIZE} bytes long, got {len(fram_data)} bytes''')
+            if not self.write_save_data(bytearray(fram_data)):
+                flashing_tool_logger.error('Save write failed')
+                raise SaveWriteFailureError()
+            flashing_tool_logger.info('Save write succeeded')
+            self.finish(True)
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.error.emit('SAVE FILE MUST BE 32KB')
+            finally:
+                e = None
+                del e
+                return None
+               Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+ e = None
+                del e
+                e = None
+                
+                try:
+                    flashing_tool_logger.error(f'''Failed to restore save: {e}''')
+                    self.error.emit('FAILED TO RESTORE SAVE FILE')
+                finally:
+                    e = None
+                    del e
+                    return None
+                    e = None
+                    del e
+
+
+
+
+    
     def write_save_data(self = None, save_data = None):
         '''Writes the save data either to FRAM or flash based on the cart/game save settings.'''
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            if len(save_data) != 32768:
+                flashing_tool_logger.error(f'''Invalid save data size: {len(save_data)}''')
+        finally:
+            return False
+            if self._fram_detected:
+                pass
+            return None
+            game_handler = map_game_title(self._chromatic_session, self._game_info)
+            return game_handler.restore_save(save_data)
+            e = None
+            
+            try:
+                flashing_tool_logger.error(f'''Error writing save data: {e}''')
+            finally:
+                e = None
+                del e
+                return False
+                e = None
+                del e
+
+
+
     __classcell__ = None
 
 
@@ -486,9 +824,30 @@ class CartClinicEraseSaveSubprocess(ChromaticSubprocess):
 
     
     def run(self):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            if not self.erase_save_data():
+                flashing_tool_logger.error('Save erase failed')
+                raise SaveWriteFailureError()
+            flashing_tool_logger.info('Save erase succeeded')
+            self.finish(True)
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(f'''Failed to erase save: {e}''')
+                self.error.emit('FAILED TO ERASE SAVE')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def erase_save_data(self = None):
         '''Writes the save data either to FRAM or flash based on the cart/game save settings.'''
         if self._fram_detected:
@@ -522,8 +881,21 @@ def apply_game_patch(game_data = None, ips_base64 = None):
         patch_file.flush()
         patch_path = patch_file.name
         None(None, None, None)
-        # Incomplete decompilation - manual review needed
-        pass
+    with None:
+        if not None:
+            pass
+    
+    try:
+        patch = Patch.load(patch_file.name)
+        patched_game = patch.apply(game_data)
+    finally:
+        os.unlink(patch_path)
+        return patched_game
+        os.unlink(patch_path)
+        return None
+
+
+
 def require_mr_cartridge_inserted(session = None):
     '''Raises an error if a MR cartridge is not detected.'''
     (cart_detected, _) = session.detect_mr_cart()

@@ -1,3 +1,8 @@
+Unsupported Node type: 12
+Unsupported Node type: 12
+Unsupported Node type: 12
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
 # Source Generated with Decompyle++
 # File: mrpatcher.pyc (Python 3.10)
 
@@ -38,9 +43,25 @@ class MRPatcherAPI:
     
     def test_connection(self = None):
         '''Check connection to patching service with a GET request'''
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            res = requests.get(self.endpoint, self._headers, **('headers',))
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+            finally:
+                e = None
+                del e
+                return False
+                e = None
+                del e
+
+
+
+    
     def request_patch(self = None, game_binary = None):
         '''Requests a game patch from the service on the given ROM.'''
         res = requests.post(self.endpoint, self._headers, game_binary, MRPATCHER_TIMEOUT_S, **('headers', 'data', 'timeout'))

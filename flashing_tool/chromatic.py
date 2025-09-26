@@ -96,7 +96,9 @@ class Chromatic(StateMachine):
         self._esp = None
 
     
-    def after_transition(self, event, state):
+   Warning: Stack history is not empty!
+Warning: block stack is not empty!
+ def after_transition(self, event, state):
         flashing_tool_logger.info("Received event '%s' to transition to the '%s' state", event, state)
         if self._on_state_transition_callback:
             self._on_state_transition_callback(event, state)
@@ -127,9 +129,24 @@ class Chromatic(StateMachine):
 
     
     def get_esp(self = None, force_connect = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        if self._esp is None or force_connect:
+            
+            try:
+                self._esp = esp_connect_loop(self.mcu_port, self.MCU_BAUD_RATE, self.MCU_CHIP_TYPE, DEFAULT_CONNECT_ATTEMPTS, **('port', 'initial_baud', 'chip', 'max_retries'))
+            finally:
+                return self._esp
+                e = None
+                
+                try:
+                    flashing_tool_logger.error(f'''Failed to connect to the ESP chip: {e}''')
+                    raise ChromaticError(e)
+                    e = None
+                    del e
+                    return self._esp
+
+
+
+    
     def fpga(self = None):
         (vendor_id, product_id) = map((lambda x: int(x, 16)), self.GOWIN_DEVICE_IDS.split(':'))
         return find_usb_device(vendor_id, product_id, **('vendor_id', 'product_id'))
@@ -195,7 +212,13 @@ class Chromatic(StateMachine):
     ready_states = None(ready_states)
     
     def disconnected_states(self = None):
-        return [
+        returWarning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+n [
             self.not_connected.id]
 
     disconnected_states = None(disconnected_states)
@@ -254,7 +277,29 @@ class Chromatic(StateMachine):
         if not is_fpga_detected(self):
             raise ChromaticError('The Chromatic cannot be flashed. Reconnect the device and try again')
         fpga_cable_name = self.fpga_cable_name
-        # Assignment completed
+        
+        try:
+            self.thread = FlashFPGASubprocess(self, fpga_filepath, fpga_cable_name, **('chromatic', 'filepath', 'fpga_cable_name'))
+            None((lambda rc = None: self.flash_both_p1_callback(rc, mcu_filepath)))
+            None((lambda prog = None: self._progress_callback(prog)))
+            self.thread.start()
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.flash_both_p1_callback(-1, None)
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def flash_both_p1_callback(self, rc, mcu_filepath):
         self._flash_result = rc
         if rc != 0:
@@ -264,9 +309,30 @@ class Chromatic(StateMachine):
 
     
     def flash_both_p2(self = None, filepath = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            skip_efuse_flash = not is_env_manufacturing()
+            self.thread = FlashMCUSubprocess(self, filepath, skip_efuse_flash, **('chromatic', 'filepath', 'skip_efuse_flash'))
+            None((lambda rc = None: self.flash_both_p2_callback(rc)))
+            None((lambda prog = None: self._progress_callback(prog)))
+            self.thread.start()
+        finally:
+            return None
+            e = None
+            
+            try:
+                flashing_tool_logger.error(e)
+                self.flash_both_p2_callback(-1)
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def flash_both_p2_callback(self, rc):
         self._flash_result = rc
         if rc != 0:
@@ -280,10 +346,43 @@ class Chromatic(StateMachine):
         polling_thread_name = self._polling_thread.name if self._polling_thread else None
         if current_thread.name != polling_thread_name:
             self._flashing_lock.acquire()
-        # Property or method access
+        
+        try:
+            if is_fpga_detected(self):
+                if self.current_state.id == self.not_connected.id:
+                    self.start_detection()
+       Unsupported opcode: CALL_FUNCTION_EX (170)
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+WARNING: Circular reference detected
+Warning: block stack is not empty!
+         elif self.current_state.id == self.detecting_firmware.id and self.fw_version is not None:
+                    self.ready()
+                elif self.current_state.id != self.not_connected.id:
+                    self.disconnect()
+            else:
+                ex = None
+                
+                try:
+                    flashing_tool_logger.warning(ex)
+                finally:
+                    ex = None
+                    del ex
+                ex = None
+                del ex
+                if current_thread.name != polling_thread_name:
+                    self._flashing_lock.release()
+                    return None
+                return None
+
+
+
+    
     def _init_hardware_attributes(self = None, component = None):
         all_attrs = []
-        # Assignment completed
+    # WARNING: Decompyle incomplete
+
+    
     def _set_hardware_attributes(self = None):
         self._set_fpga_attributes()
 
@@ -306,11 +405,29 @@ class Chromatic(StateMachine):
                 setattr(self, f'''fpga_{attr}''', value)
             
             return None
+            ex = None
         return None
-        # Return statement completed
+        ex = None
+
+    
     def _perform_device_poll(self = None):
         timeout = 1
-        # Assignment completed
+        if self._auto_detect_keepalive.is_set() is False:
+            with self._flashing_lock:
+                self.update_status()
+                if self.current_state.id in self.connected_states and timeout != 2:
+                    flashing_tool_logger.info('Device is in a connected state. Increasing the timeout to 2s')
+                    timeout = 2
+                None(None, None, None)
+            with None:
+                if not None:
+                    pass
+            time.sleep(timeout)
+            if not self._auto_detect_keepalive.is_set() is False:
+                return None
+            return None
+
+    
     def _stop_device_auto_detection(self):
         if self._on_state_transition_callback is not None:
             self._auto_detect_keepalive.set()

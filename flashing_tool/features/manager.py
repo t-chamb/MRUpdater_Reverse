@@ -1,3 +1,8 @@
+Unsupported Node type: 12
+Warning: block stack is not empty!
+Unsupported opcode: SET_ADD (187)
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
 # Source Generated with Decompyle++
 # File: manager.pyc (Python 3.10)
 
@@ -43,13 +48,54 @@ class FeatureManager:
 
     
     def fetch_features(self = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            previous_features = self._enabled_features.copy()
+            user_features = self._client.features.get_available_features()
+            if not user_features.feature_ids:
+                pass
+            self._enabled_features = (lambda .0: pass# WARNING: Decompyle incomplete
+)([])
+            logger.debug(f'''Setting enabled_features from server: {self._enabled_features}''')
+        finally:
+            pass
+        self._enabled_features = set()
+        logger.warning('Failed to fetch user features from feature api', True, **('exc_info',))
+        return FeatureUpdate(previous_features, self._enabled_features.copy())
+
+
+    
     def activate_code(self = None, code = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            self._client.activations.enable_features_by_activation_code(code)
+        finally:
+            return None
+            bre = None
+            
+            try:
+                logger.warning('Failed to activate code', True, **('exc_info',))
+                if bre.body is not None or err = ErrorResponse.from_json(bre.body) is not None:
+                    if not err.error:
+                        pass
+                    bre = None
+                    del bre
+                    return ErrorResponse.from_json(bre.body)
+                bre = None
+                del bre
+                return 'Failed to activate code'
+            finally:
+                bre = None
+                del bre
+                return 'Failed to activate code'
+                bre = None
+                del bre
+                logger.warning('Failed to activate code', True, **('exc_info',))
+                return 'Failed to activate code'
+
+
+
+    
     def is_feature_enabled(self = None, feature = None):
         return feature in self._enabled_features
 

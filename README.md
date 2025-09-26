@@ -1,118 +1,66 @@
-# MRUpdater Source Code
+# MRUpdater Decompilation Summary
 
-This repository contains the decompiled and reconstructed source code of ModRetro's MRUpdater application, enhanced with a high-performance ROM dumper.
+This directory contains the decompiled Python source code from the MRUpdater.exe application. The decompilation was performed using the patched pycdc tool to handle Python 3.10 bytecode.
 
-## Overview
+## Successfully Decompiled Files
 
-MRUpdater is the official tool for updating ModRetro Chromatic handheld gaming devices and managing Game Boy cartridges through the "Cart Clinic" functionality.
+### Main Application
+- `main.py` - Main entry point and GUI class (558 lines)
+  - Contains the main application window and UI logic
+  - Manages firmware downloads, updates, and Cart Clinic integration
+  - Uses PySide6 for Qt GUI
 
-### 🚀 Enhanced ROM Dumper
-We've developed a **high-performance ROM dumper** that achieves:
-- **Perfect accuracy**: 100% identical ROM dumps
-- **High speed**: ~789 bytes/second (70x faster than original)
-- **Complete support**: Full Game Boy cartridge dumping in ~5.5 minutes
-- **Fixed banking**: Corrected bank switching logic for accurate multi-bank ROMs
+### Cart Clinic Module (`cartclinic/`)
+- `mrpatcher.py` - MRPatcher API client (77 lines)
+  - Handles communication with the game patching service
+  - Sends game ROMs for patching
+- `cc_subprocess.py` - Cart Clinic subprocess management (904 lines)
+  - Manages threading and subprocess operations for Cart Clinic
+- `gui.py` - Cart Clinic GUI components (653 lines)
+  - Cart Clinic specific UI screens and logic
+- `cartridge_read.py` - Cartridge reading functionality (48 lines)
+- `cartridge_write.py` - Cartridge writing functionality (116 lines)
+- `save_to_rom.py` - Save file to ROM operations (126 lines)
 
-## Architecture
+### Flashing Tool Module (`flashing_tool/`)
+- `chromatic.py` - Chromatic device state machine (451 lines)
+  - Manages USB device detection and firmware flashing
+  - Contains state machine for update process
+- `chromatic_subprocess.py` - Subprocess operations (106 lines) [partially decompiled]
+- `config_parser.py` - Configuration file parsing (54 lines)
+- `constants.py` - Application constants (17 lines)
+  - Contains app name, S3 bucket info, feature flags
+- `s3_wrapper.py` - AWS S3 operations (75 lines)
+  - Downloads firmware from updates.modretro.com bucket
+- `util.py` - Utility functions (89 lines)
+- `features/manager.py` - Feature flag management (125 lines)
+  - Handles activation codes and feature toggles
 
-The application is built using:
-- **Python 3.10** with PyQt/PySide for the GUI
-- **PyInstaller** for packaging
-- **USB CDC-ACM** serial communication for device interaction
+### LibPyRetro Module (`libpyretro/`)
+- `feature_api/feature_api_client.py` - Feature API client (26 lines)
+  - Communicates with feature server
+- `cartclinic/cart_api.py` - Cart API protocol (283 lines)
+  - Low-level cartridge communication protocol
+- `cartclinic/comms/session.py` - Communication session (611 lines) [partially decompiled]
+  - Manages serial communication with cartridge
 
-## Module Structure
+### External Libraries
+- `requests/sessions.py` - HTTP session management (497 lines)
+- `botocore/session.py` - AWS SDK session (1077 lines)
 
-### Core Modules
+## Key Findings
 
-- `main.py` - Application entry point
-- `flashing_tool/` - Main application framework and device communication
-- `cartclinic/` - Cart Clinic functionality for cartridge operations
-- `libpyretro/` - Low-level communication library
+1. **Architecture**: The application uses a Qt-based GUI (PySide6) with state machine-driven firmware updates
+2. **S3 Integration**: Firmware is downloaded from `updates.modretro.com` S3 bucket
+3. **Feature Flags**: Supports preview/rollback firmware via activation codes
+4. **Cart Clinic**: Integrated game patching service that communicates with a remote API
+5. **Device Communication**: Uses USB for Chromatic device and serial for cartridge operations
 
-### Key Components
+## Decompilation Issues
 
-#### Device Communication (`flashing_tool/`)
-- `chromatic.py` - Device detection and management
-- `chromatic_subprocess.py` - Subprocess handling for operations
-- `constants.py` - Application constants
-- `config_parser.py` - Configuration management
-- `gui/` - Main GUI components
+Some files had minor issues:
+- Dataclass definitions appear as `<NODE:12>` placeholders
+- Some exception handling shows as incomplete
+- A few opcode warnings (RERAISE, JUMP_IF_NOT_EXC_MATCH) that were patched
 
-#### Cart Clinic (`cartclinic/`)
-- `cartridge_read.py` - Cartridge reading operations
-- `cartridge_write.py` - Cartridge writing operations
-- `mrpatcher.py` - ROM patching functionality
-- `save_to_rom.py` - Save data management
-- `gui.py` - Cart Clinic GUI interface
-
-#### Communication Layer (`libpyretro/`)
-- `cartclinic/cart_api.py` - Cartridge API interface
-- `cartclinic/comms/` - USB communication protocols
-- `feature_api/` - Feature API interface
-
-## USB Communication
-
-The application communicates with the ModRetro Chromatic via:
-- **USB VID:PID**: 0x374E:0x013F
-- **Protocol**: USB CDC-ACM serial on Endpoint 3
-- **Operations**: Cartridge read/write, ROM patching, save management
-
-## Legal Notice
-
-This source code was obtained through legitimate reverse engineering of publicly distributed binaries for interoperability purposes. The decompilation was performed using:
-- String extraction and file structure analysis
-- No direct code copying from original sources
-- Clean-room implementation based on protocol observation
-
-## Quick Start
-
-### ROM Dumping (Enhanced Feature)
-```bash
-# Dump a complete ROM (recommended)
-python fast_rom_dumper.py --full my_game.gb
-
-# Dump ROM with save data
-python fast_rom_dumper.py --full --save-data my_game.gb
-
-# Test with limited banks
-python fast_rom_dumper.py --max-banks 4 test.gb
-```
-
-### Original MRUpdater
-```bash
-python main.py
-```
-
-## Performance Achievements
-
-| Metric | Original | Enhanced | Improvement |
-|--------|----------|----------|-------------|
-| Speed | 11 bytes/s | 789 bytes/s | **70x faster** |
-| 256KB ROM Time | 13+ hours | 5.5 minutes | **142x faster** |
-| Accuracy | Variable | 100% perfect | **Perfect match** |
-
-## Usage
-
-This source code is provided for:
-- **ROM dumping**: High-performance cartridge backup
-- Educational purposes
-- Protocol documentation
-- Development of compatible tools
-- Community research
-
-## Dependencies
-
-Based on the module structure, the application requires:
-- PyQt/PySide (GUI framework)
-- pyserial (USB communication)
-- boto3/botocore (AWS S3 integration)
-- esptool (ESP32 communication)
-- pydantic (data validation)
-
-## Contributing
-
-This is a research repository. For active development of compatible tools, see the related projects in the ModRetro Chromatic ecosystem.
-
-## Disclaimer
-
-This repository is not affiliated with ModRetro. It is an independent reverse engineering effort for interoperability and educational purposes.
+Overall, the decompilation was successful and provides a clear understanding of the MRUpdater application structure and functionality.

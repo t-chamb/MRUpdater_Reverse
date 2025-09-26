@@ -13,7 +13,7 @@ updateFrameBuffer
 connection_test
 '''
 from libpyretro.cartclinic.protocol.common import SCREEN_PIXEL_WIDTH, PixelRGB555, PixelRGB888
-from .protocol import CartFlashChip, CartFlashInfo, CmdDetectCart, CmdReadCartByte, CmdSetFrameBufferPixel, CmdWriteCartByte, CmdWriteCartFlashByte, ReplyDetectCart, ReplyReadCartByte, ReplySetFrameBufferPixel, ReplyWriteCartByte, ReplyWriteCartFlashByte
+from protocol import CartFlashChip, CartFlashInfo, CmdDetectCart, CmdReadCartByte, CmdSetFrameBufferPixel, CmdWriteCartByte, CmdWriteCartFlashByte, ReplyDetectCart, ReplyReadCartByte, ReplySetFrameBufferPixel, ReplyWriteCartByte, ReplyWriteCartFlashByte
 MAX_CART_SIZE_KB = 8388608
 MAX_BANK_SIZE_KB = 16384
 NUM_BANKS = MAX_CART_SIZE_KB // MAX_BANK_SIZE_KB
@@ -22,55 +22,64 @@ NUM_FRAM_BANKS = 4
 class CartAPI_Builder:
     
     def set_bank(bank_num = None):
-        if bank_num > NUM_BANKS:
-            raise ValueError(f'''Bank number {bank_num} exceeds the maximum of NUM_BANKS={NUM_BANKS}''')
-        high_bank = CmdWriteCartByte(12288, bank_num >> 8 & 1)
-        low_bank = CmdWriteCartByte(8448, bank_num & 255)
+        if bank_num <= bank_num or bank_num <= NUM_BANKS:
+            pass
+        else:
+            0
+        high_bank = CmdWriteCartByte(12288, bank_num >> 8 & 1, **('addr', 'data'))
+        low_bank = CmdWriteCartByte(8448, bank_num & 255, **('addr', 'data'))
         return [
             high_bank.encode(),
             low_bank.encode()]
+        raise ValueError(f'''Bank number {bank_num} exceeds the maximum of NUM_BANKS={NUM_BANKS}''')
 
-    set_bank = staticmethod(set_bank)
+    set_bank = None(set_bank)
     
     def set_bank_fram(bank_num = None):
-        if bank_num > NUM_FRAM_BANKS:
-            raise ValueError(f'''Bank number {bank_num} exceeds the maximum of NUM_FRAM_BANKS={NUM_FRAM_BANKS}''')
-        return CmdWriteCartByte(16384, bank_num).encode()
+        if bank_num <= bank_num or bank_num <= NUM_FRAM_BANKS:
+            pass
+        else:
+            0
+        return CmdWriteCartByte(16384, bank_num, **('addr', 'data')).encode()
+        raise ValueError(f'''Bank number {bank_num} exceeds the maximum of NUM_FRAM_BANKS={NUM_FRAM_BANKS}''')
 
-    set_bank_fram = staticmethod(set_bank_fram)
+    set_bank_fram = None(set_bank_fram)
     
-    def read_byte(block = None, byte_offset = None, bank_index = None):
+    def read_byte(block = None, byte_offset = None, bank_index = staticmethod):
         byte_offset &= 255
         block &= 255
         if bank_index > 0:
             block |= 64
         addr = byte_offset | block << 8
-        return CmdReadCartByte(addr).encode()
+        return CmdReadCartByte(addr, **('addr',)).encode()
 
-    read_byte = staticmethod(read_byte)
+    read_byte = None(read_byte)
     
-    @staticmethod
-    def read_byte_fram(block, byte_offset):
+    def read_byte_fram(block = None, byte_offset = None):
         byte_offset &= 255
         block = 160 | block & 255
         addr = byte_offset | block << 8
-        return CmdReadCartByte(addr).encode()
+        return CmdReadCartByte(addr, **('addr',)).encode()
 
-    @staticmethod
-    def write_byte(block, offset, bank_index, data_byte):
+    read_byte_fram = None(read_byte_fram)
+    
+    def write_byte(block = None, offset = None, bank_index = staticmethod, data_byte = ('block', int, 'offset', int, 'bank_index', int, 'data_byte', int, 'return', bytes)):
         offset &= 255
         block &= 255
         if bank_index > 0:
             block |= 64
         addr = offset | block << 8
-        return CmdWriteCartByte(addr, data_byte).encode()
+        return CmdWriteCartByte(addr, data_byte, **('addr', 'data')).encode()
 
-    @staticmethod
-    def write_byte_fram(block, offset, data_byte):
+    write_byte = None(write_byte)
+    
+    def write_byte_fram(block = None, offset = None, data_byte = staticmethod):
         offset &= 255
         block = 160 | block & 255
         addr = offset | block << 8
-        return CmdWriteCartByte(addr, data_byte).encode()
+        return CmdWriteCartByte(addr, data_byte, **('addr', 'data')).encode()
+
+    write_byte_fram = None(write_byte_fram)
     
     def erase_flash_all():
         '''
@@ -78,9 +87,9 @@ class CartAPI_Builder:
         are a part of the JEDEC standard that most (if not all) flash chips
         follow.
         '''
-        return CmdWriteCartByte(2730, 170).encode() + CmdWriteCartByte(1365, 85).encode() + CmdWriteCartByte(2730, 128).encode() + CmdWriteCartByte(2730, 170).encode() + CmdWriteCartByte(1365, 85).encode() + CmdWriteCartByte(2730, 16).encode()
+        return CmdWriteCartByte(2730, 170, **('addr', 'data')).encode() + CmdWriteCartByte(1365, 85, **('addr', 'data')).encode() + CmdWriteCartByte(2730, 128, **('addr', 'data')).encode() + CmdWriteCartByte(2730, 170, **('addr', 'data')).encode() + CmdWriteCartByte(1365, 85, **('addr', 'data')).encode() + CmdWriteCartByte(2730, 16, **('addr', 'data')).encode()
 
-    erase_flash_all = staticmethod(erase_flash_all)
+    erase_flash_all = None(erase_flash_all)
     
     def erase_sector(sector_num = None, sector_size = None):
         '''
@@ -97,9 +106,9 @@ class CartAPI_Builder:
         if bank > 0:
             sector |= 64
         sector <<= 8
-        return CmdWriteCartByte(2730, 170).encode() + CmdWriteCartByte(1365, 85).encode() + CmdWriteCartByte(2730, 128).encode() + CmdWriteCartByte(2730, 170).encode() + CmdWriteCartByte(1365, 85).encode() + CmdWriteCartByte(sector, 48).encode()
+        return CmdWriteCartByte(2730, 170, **('addr', 'data')).encode() + CmdWriteCartByte(1365, 85, **('addr', 'data')).encode() + CmdWriteCartByte(2730, 128, **('addr', 'data')).encode() + CmdWriteCartByte(2730, 170, **('addr', 'data')).encode() + CmdWriteCartByte(1365, 85, **('addr', 'data')).encode() + CmdWriteCartByte(sector, 48, **('addr', 'data')).encode()
 
-    erase_sector = staticmethod(erase_sector)
+    erase_sector = None(erase_sector)
     
     def get_flash_type():
         '''
@@ -108,9 +117,9 @@ class CartAPI_Builder:
         are a part of the JEDEC standard that most (if not all) flash chips
         follow.
         '''
-        return CmdWriteCartByte(2730, 170).encode() + CmdWriteCartByte(1365, 85).encode() + CmdWriteCartByte(2730, 144).encode()
+        return CmdWriteCartByte(2730, 170, **('addr', 'data')).encode() + CmdWriteCartByte(1365, 85, **('addr', 'data')).encode() + CmdWriteCartByte(2730, 144, **('addr', 'data')).encode()
 
-    get_flash_type = staticmethod(get_flash_type)
+    get_flash_type = None(get_flash_type)
     
     def reset_flash_controller():
         '''
@@ -119,26 +128,26 @@ class CartAPI_Builder:
         as identification mode. Magic numbers are a part of the JEDEC standard
         that most (if not all) flash chips follow.
         '''
-        return CmdWriteCartByte(2730, 170).encode() + CmdWriteCartByte(1365, 85).encode() + CmdWriteCartByte(0, 240).encode()
+        return CmdWriteCartByte(2730, 170, **('addr', 'data')).encode() + CmdWriteCartByte(1365, 85, **('addr', 'data')).encode() + CmdWriteCartByte(0, 240, **('addr', 'data')).encode()
 
-    reset_flash_controller = staticmethod(reset_flash_controller)
+    reset_flash_controller = None(reset_flash_controller)
     
-    @staticmethod
-    def write_flash_byte(block, offset, bank_index, data_byte):
+    def write_flash_byte(block = None, offset = None, bank_index = staticmethod, data_byte = ('block', int, 'offset', int, 'bank_index', int, 'data_byte', int, 'return', bytes)):
         offset &= 255
         block &= 255
         if bank_index > 0:
             block |= 64
         addr = offset | block << 8
-        return CmdWriteCartFlashByte(addr, data_byte).encode()
+        return CmdWriteCartFlashByte(addr, data_byte, **('addr', 'data')).encode()
+
+    write_flash_byte = None(write_flash_byte)
     
     def detect_cart():
         return CmdDetectCart().encode()
 
-    detect_cart = staticmethod(detect_cart)
+    detect_cart = None(detect_cart)
     
-    @staticmethod
-    def set_frame_buffer_pixel(x, y, color888):
+    def set_frame_buffer_pixel(x = None, y = None, color888 = staticmethod):
         '''
         Constructs a message to set the pixel at (x,y) to the specified color.
         Color is expected in RGB888 and gets converted to RGB555.
@@ -150,24 +159,25 @@ class CartAPI_Builder:
         '''
         addr = y * SCREEN_PIXEL_WIDTH + x
         (r, g, b) = PixelRGB555.from_rgb888(color888).value
-        return CmdSetFrameBufferPixel(addr, r, g, b).encode()
+        return CmdSetFrameBufferPixel(addr, r, g, b, **('addr', 'r', 'g', 'b')).encode()
+
+    set_frame_buffer_pixel = None(set_frame_buffer_pixel)
     
     def enable_ram():
         '''
         Constructs a message to enable RAM access
         '''
-        return CmdWriteCartByte(0, 10).encode()
+        return CmdWriteCartByte(0, 10, **('addr', 'data')).encode()
 
-    enable_ram = staticmethod(enable_ram)
+    enable_ram = None(enable_ram)
     
-    @staticmethod
     def disable_ram():
         '''
         Constructs a message to disable RAM access
         '''
-        return CmdWriteCartByte(0, 0).encode()
+        return CmdWriteCartByte(0, 0, **('addr', 'data')).encode()
 
-    disable_ram = staticmethod(disable_ram)
+    disable_ram = None(disable_ram)
 
 
 class CartAPI_Parser:
@@ -183,7 +193,7 @@ class CartAPI_Parser:
         msg['addr'] &= 16383
         return (msg['addr'], msg['data'])
 
-    byte_read = staticmethod(byte_read)
+    byte_read = None(byte_read)
     
     def cart_detection_status(response = None):
         '''
@@ -200,7 +210,7 @@ class CartAPI_Parser:
         reply = ReplyDetectCart().decode(response)
         return (reply['inserted'] == 1, reply['removed'] == 1)
 
-    cart_detection_status = staticmethod(cart_detection_status)
+    cart_detection_status = None(cart_detection_status)
     
     def byte_write(response = None):
         '''
@@ -211,7 +221,7 @@ class CartAPI_Parser:
         reply = ReplyWriteCartByte().decode(response)
         return (reply['addr'], reply['data'])
 
-    byte_write = staticmethod(byte_write)
+    byte_write = None(byte_write)
     
     def byte_write_flash(response = None):
         '''
@@ -224,7 +234,7 @@ class CartAPI_Parser:
         msg['addr'] &= 16383
         return (msg['addr'], msg['data'])
 
-    byte_write_flash = staticmethod(byte_write_flash)
+    byte_write_flash = None(byte_write_flash)
     
     def flash_type(flash_info_data = None):
         """
@@ -253,16 +263,14 @@ class CartAPI_Parser:
             CartFlashChip.Microchip_SST39VF1681: CartFlashInfo(CartFlashChip.Microchip_SST39VF1681, 'SST39VF1681-70-4C-EKE', 'Microchip', 2048, 64, 'sector', 64, **('part_id', 'part_number', 'vendor', 'total_size_kb', 'sector_size_kb', 'grouping', 'recovery_offset_kb')) }
         if flash_info_data[0] == 157 and flash_info_data[2] == 126 and flash_info_data[28] == 29 and flash_info_data[30] == 1:
             return flash_chips[CartFlashChip.ISSI_IS29GL032]
-        if flash_info_data[0] == 1 and flash_info_data[2] == 83 and flash_info_data[4] == 0 and flash_info_data[6] == 2:
+        if None[0] == 1 and flash_info_data[2] == 83 and flash_info_data[4] == 0 and flash_info_data[6] == 2:
             return flash_chips[CartFlashChip.Infineon_S29JL032J70]
-        if flash_info_data[0] == 191 and flash_info_data[1] == 200:
+        if None[0] == 191 and flash_info_data[1] == 200:
             return flash_chips[CartFlashChip.Microchip_SST39VF1681]
-        if flash_info_data[0] == 191 and flash_info_data[1] == 201:
+        if None[0] == 191 and flash_info_data[1] == 201:
             return flash_chips[CartFlashChip.Microchip_SST39VF1682]
-        
-        return None  # Unknown flash chip
 
-    flash_type = staticmethod(flash_type)
+    flash_type = None(flash_type)
     
     def set_frame_buffer_pixel_confirmation(response = None):
         '''
@@ -271,5 +279,5 @@ class CartAPI_Parser:
         ReplySetFrameBufferPixel().decode(response)
         return True
 
-    set_frame_buffer_pixel_confirmation = staticmethod(set_frame_buffer_pixel_confirmation)
+    set_frame_buffer_pixel_confirmation = None(set_frame_buffer_pixel_confirmation)
 

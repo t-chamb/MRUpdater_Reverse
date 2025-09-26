@@ -1,0 +1,9 @@
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+WARNING: Circular reference detected
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+WARNING: Circular reference detected
+Error decompyling ../MRUpdater.exe_extracted/main.pyc: std::bad_cast

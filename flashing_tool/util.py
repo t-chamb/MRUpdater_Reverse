@@ -1,3 +1,8 @@
+Unsupported Node type: 12
+Unsupported Node type: 12
+Unsupported Node type: 12
+Unsupported Node type: 12
+Unsupported node type 48 in NODE_JOINEDSTR
 # Source Generated with Decompyle++
 # File: util.pyc (Python 3.10)
 

@@ -1,3 +1,6 @@
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
 # Source Generated with Decompyle++
 # File: config_parser.pyc (Python 3.10)
 
@@ -12,7 +15,16 @@ class ConfigParser:
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config_path = os.path.join(APP_DATA_DIR, CONFIG_FILE_NAME)
-        # Assignment completed
+        
+        try:
+            os.makedirs(APP_DATA_DIR)
+        finally:
+            pass
+        self.config.read(self.config_path, 'utf-8', **('encoding',))
+        return None
+
+
+    
     def load(self):
         return {
             'fpga_fw_file_path': self.get('fpga_fw_file_path'),
@@ -21,9 +33,16 @@ class ConfigParser:
 
     
     def get(self, option):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            value = self.config.get('DEFAULT', option)
+        finally:
+            return value
+            value = ''
+            return value
+
+
+    
     def set(self, option, value):
         self.config.set('DEFAULT', option, value)
         self.config.write(open(self.config_path, 'w', 'utf-8', **('encoding',)))

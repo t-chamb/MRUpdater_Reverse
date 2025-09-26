@@ -1,3 +1,5 @@
+Unsupported Node type: 12
+Unsupported opcode: DICT_MERGE (213)
 # Source Generated with Decompyle++
 # File: s3_wrapper.pyc (Python 3.10)
 
@@ -35,7 +37,9 @@ class S3Wrapper:
     def __init__(self = None, bucket = None, credentials = None):
         self.bucket = bucket
         config = asdict(credentials) if credentials else DEFAULT_AUTHENTICATION
-        # Assignment completed
+    # WARNING: Decompyle incomplete
+
+    
     def download_file(self = None, key = None):
         destination = os.path.join(tempfile.gettempdir(), key)
         dest_dir = os.path.dirname(destination)

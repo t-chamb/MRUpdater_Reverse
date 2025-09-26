@@ -235,7 +235,9 @@ class CartClinic:
 
     
     def show_save_warning_prompt(self = None):
-        return self._main_gui.show_prompt('Warning', self._cc_save_op.value.warning_message)
+        returnWarning: Stack history is not empty!
+Warning: block stack is not empty!
+ self._main_gui.show_prompt('Warning', self._cc_save_op.value.warning_message)
 
     
     def show_save_success_message(self):
@@ -244,9 +246,55 @@ class CartClinic:
     
     def setup_save_operation(self = None, operation = None):
         '''Start a save operation by detecting FRAM on the cartridge'''
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            self._cc_save_op = operation
+            if not self.show_save_warning_prompt():
+                pass
+        finally:
+            return None
+            if self._cc_save_op == CartClinicSaveOperation.BACKUP:
+                (save_path, _) = QFileDialog.getSaveFileName(self._main_gui, 'Save As', str(self._previous_save_dir), 'Game Boy Save File (*.sav)', **('dir', 'filter'))
+                if not save_path:
+                    pass
+                return None
+            if not None and save_path.endswith('.sav'):
+                save_path += '.sav'
+            elif self._cc_save_op == CartClinicSaveOperation.RESTORE:
+                (save_path, _) = QFileDialog.getOpenFileName(self._main_gui, 'Select a save file', str(self._previous_save_dir), 'Game Boy Save File (*.sav);;All Files (*.*)', **('dir', 'filter'))
+                if not save_path:
+                    pass
+                return None
+                file_size = os.path.getsize(save_path)
+                if file_size != FRAM_SIZE:
+                    pass
+                return None
+            if self._cc_save_op in (CartClinicSaveOperation.BACKUP, CartClinicSaveOperation.RESTORE):
+                self._previous_save_dir = Path(save_path).parent
+                self._cc_save_path = save_path
+            else:
+                self._cc_save_path = None
+            logger.info(f'''Beginning save operation: {self._cc_save_op}''')
+            self._chromatic.cart_clinic_process_save()
+            self._cc_save_detect_thread = CartClinicDetectFRAMSubprocess(self._chromatic, self._cart_clinic_fw_path, **('chromatic', 'cart_clinic_fw_path'))
+            self._cc_save_detect_thread.error.connect(self.cart_clinic_error)
+            self._cc_save_detect_thread.setup_complete_signal.connect(self.setup_save_operation_callback)
+            self._cc_save_detect_thread.start()
+            return None
+            e = None
+            
+            try:
+                logger.error(f'''Error while setting up save operation: {e}''')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def setup_save_operation_callback(self):
         session = self._create_session()
         if not self._cc_save_detect_thread.check_mr_cart_inserted(session):
@@ -278,10 +326,37 @@ class CartClinic:
         self.continue_save_operation(session, False)
 
     
-    def continue_save_operation(self = None, session = None, fram_detected = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+    def continue_save_operationWarning: Stack history is not empty!
+Warning: block stack is not empty!
+(self = None, session = None, fram_detected = None):
+        
+        try:
+            if self._cc_save_op == CartClinicSaveOperation.BACKUP:
+                self.save_backup(session, fram_detected)
+        finally:
+            return None
+            if self._cc_save_op == CartClinicSaveOperation.RESTORE:
+                self.save_restore(session, fram_detected)
+            return None
+            if self._cc_save_op == CartClinicSaveOperation.ERASE:
+                self.save_erase(session, fram_detected)
+            return None
+            return None
+            e = None
+            
+            try:
+                logger.error(e)
+                self.cart_clinic_error('FAILED TO PERFORM SAVE OPERATION')
+            finally:
+                e = None
+                del e
+                return None
+                e = None
+                del e
+
+
+
+    
     def save_backup(self = None, session = None, fram_detected = None):
         logger.info(f'''Backing up save to file {self._cc_save_path}''')
         self._cc_save_op_thread = CartClinicBackupSaveSubprocess(self._chromatic, session, self._cc_save_path, fram_detected, self._cc_save_game_info, **('chromatic', 'chromatic_session', 'save_path', 'fram_detected', 'game_info'))
@@ -408,7 +483,9 @@ class CartClinic:
     def cart_clinic_update_callback(self = None, result = None):
         self.cleanup_cart_clinic()
         if result:
-            self._chromatic.cart_clinic_complete()
+            self._chromatic.cart_clinic_cWarning: Stack history is empty, something wrong might have happened
+Warning: block stack is not empty!
+omplete()
             return None
         None._chromatic.cart_clinic_fail()
 
@@ -494,9 +571,29 @@ class CartClinic:
 
     
     def display_homebrew_cart_label(self = None):
-        pass
-        # TODO: Implementation needed
-        raise NotImplementedError("Method not implemented")
+        
+        try:
+            image_path = resolve_path('resources/img/cartclinic/homebrew_thumbnail.png')
+            with open(image_path, 'rb') as image:
+                image_data = image.read()
+                None(None, None, None)
+            with None:
+                if not None:
+                    pass
+        finally:
+            pass
+        logging.error('Failed to load homebrew cart thumbnail')
+        return None
+        pixmap = QPixmap()
+        pixmap.loadFromData(QByteArray(image_data))
+        self._uptodate_screen.cartridge_label1.setPixmap(pixmap)
+        self._uptodate_screen.cartridge_label1.raise_()
+        self._update_screen.cartridge_label2.setPixmap(pixmap)
+        self._update_screen.cartridge_label2.raise_()
+        return None
+
+
+    
     def update_screens(self = None, main_tab_ready = None, chromatic_state = None):
         '''Return the screens and extra elements to be displayed given the current state'''
         show_screens = []
