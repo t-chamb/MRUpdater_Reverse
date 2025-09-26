@@ -1,0 +1,7 @@
+Cartridge Information
+====================
+Title: DEMO CART
+Type: MBC1
+ROM Size: 32768 bytes (32KB)
+Save Size: 0 bytes
+Checksum Valid: No
