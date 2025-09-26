@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Hardened Runtime Entitlements -->
+    
+    <!-- Allow execution of JIT-compiled code -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <false/>
+    
+    <!-- Allow unsigned executable memory -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <false/>
+    
+    <!-- Allow DYLD environment variables -->
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+    <false/>
+    
+    <!-- Disable library validation -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <false/>
+    
+    <!-- Disable executable memory protection -->
+    <key>com.apple.security.cs.disable-executable-page-protection</key>
+    <false/>
+    
+    <!-- Network Entitlements -->
+    
+    <!-- Outgoing network connections -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- Incoming network connections (if needed for local server) -->
+    <key>com.apple.security.network.server</key>
+    <false/>
+    
+    <!-- File System Access -->
+    
+    <!-- User selected files (for ROM file operations) -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    
+    <!-- Downloads folder access -->
+    <key>com.apple.security.files.downloads.read-write</key>
+    <true/>
+    
+    <!-- Documents folder access -->
+    <key>com.apple.security.files.documents.read-write</key>
+    <true/>
+    
+    <!-- Home directory access (limited) -->
+    <key>com.apple.security.personal-information.location</key>
+    <false/>
+    
+    <!-- Hardware Access -->
+    
+    <!-- USB device access -->
+    <key>com.apple.security.device.usb</key>
+    <true/>
+    
+    <!-- Serial port access -->
+    <key>com.apple.security.device.serial</key>
+    <true/>
+    
+    <!-- Audio/Video (if needed for device communication) -->
+    <key>com.apple.security.device.audio-input</key>
+    <false/>
+    
+    <key>com.apple.security.device.camera</key>
+    <false/>
+    
+    <!-- System Services -->
+    
+    <!-- Print (if needed for logging/reports) -->
+    <key>com.apple.security.print</key>
+    <false/>
+    
+    <!-- Address book (not needed) -->
+    <key>com.apple.security.personal-information.addressbook</key>
+    <false/>
+    
+    <!-- Calendar (not needed) -->
+    <key>com.apple.security.personal-information.calendars</key>
+    <false/>
+    
+    <!-- Photos (not needed) -->
+    <key>com.apple.security.personal-information.photos-library</key>
+    <false/>
+    
+    <!-- Application-Specific Entitlements -->
+    
+    <!-- Temporary exception for debugging (remove in production) -->
+    <key>com.apple.security.get-task-allow</key>
+    <false/>
+    
+    <!-- Inherit entitlements from parent process -->
+    <key>com.apple.security.inherit</key>
+    <false/>
+    
+    <!-- Code signing entitlements -->
+    <key>com.apple.security.cs.debugger</key>
+    <false/>
+    
+    <!-- Automation and Scripting -->
+    
+    <!-- AppleScript (if needed) -->
+    <key>com.apple.security.automation.apple-events</key>
+    <false/>
+    
+    <!-- System events (if needed) -->
+    <key>com.apple.security.system-events</key>
+    <false/>
+    
+    <!-- Keychain Access -->
+    
+    <!-- Keychain access for storing credentials -->
+    <key>keychain-access-groups</key>
+    <array>
+        <string>$(AppIdentifierPrefix)com.modretro.mrupdater</string>
+    </array>
+    
+    <!-- App Groups (if needed for shared data) -->
+    <key>com.apple.security.application-groups</key>
+    <array>
+        <string>group.com.modretro.mrupdater</string>
+    </array>
+    
+    <!-- Exceptions for Third-Party Libraries -->
+    
+    <!-- Python runtime exceptions (if using embedded Python) -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <false/>
+    
+    <!-- Qt framework exceptions -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <false/>
+    
+    <!-- USB library exceptions -->
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+    <false/>
+    
+    <!-- Development and Testing -->
+    
+    <!-- Allow debugging in development builds -->
+    <!-- Remove or set to false for production -->
+    <key>com.apple.security.get-task-allow</key>
+    <false/>
+    
+    <!-- Allow runtime code modification for development -->
+    <!-- Remove or set to false for production -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <false/>
+    
+    <!-- Logging and Diagnostics -->
+    
+    <!-- System log access for diagnostics -->
+    <key>com.apple.security.system-logs</key>
+    <false/>
+    
+    <!-- Crash reporting -->
+    <key>com.apple.security.exception.files.absolute-path.read-write</key>
+    <array>
+        <string>/Library/Logs/DiagnosticReports/</string>
+        <string>/Users/*/Library/Logs/DiagnosticReports/</string>
+    </array>
+    
+    <!-- Temporary Files -->
+    
+    <!-- Temporary directory access -->
+    <key>com.apple.security.temporary-exception.files.absolute-path.read-write</key>
+    <array>
+        <string>/tmp/</string>
+        <string>/var/tmp/</string>
+    </array>
+    
+    <!-- External Tools -->
+    
+    <!-- Allow execution of bundled tools -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <false/>
+    
+    <!-- Specific tool paths (if needed) -->
+    <key>com.apple.security.temporary-exception.files.absolute-path.read-only</key>
+    <array>
+        <string>/usr/bin/</string>
+        <string>/usr/local/bin/</string>
+    </array>
+    
+    <!-- Sandbox Exceptions -->
+    
+    <!-- Network exceptions for specific domains -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- File system exceptions for specific paths -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    
+    <!-- Hardware exceptions for USB devices -->
+    <key>com.apple.security.device.usb</key>
+    <true/>
+    
+</dict>
+</plist>

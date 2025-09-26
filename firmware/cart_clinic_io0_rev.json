@@ -1,0 +1,7 @@
+{
+  "source_file": "MRUpdater/Contents/Frameworks/lib/io0_rev.bin",
+  "type": "Generic",
+  "size": 928566,
+  "header_hex": "ffffffffffffffffffffffffffffffff",
+  "description": "FPGA bitstream extracted from MRUpdater for Cart Clinic mode"
+}
